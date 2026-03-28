@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>LeetCode Assistant</title>
+
+        <style>
+            body{
+                font-family: Arial, sans-serif;
+                background-color: #f4f6f8;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container{
+                max-width: 700px;
+                margin: 50px auto;
+                background: white;
+                padding: 25px;
+                border-radius: 10px;
+                box-shadow: 0px 0px 10px rgba(0,0,0,0.1)
+            }
+
+            h1{
+                text-align: center;
+            }
+
+            h2 {
+                border-left: 4px solid #007BFF;
+                padding-left: 10px;
+            }
+
+            textarea,select{
+                width: 100%;
+                padding: 10px;
+                margin-top: 10px;
+            }
+
+            button {
+                width: 100%;
+                padding: 12px;
+                margin-top: 15px;
+                background-color: #007BFF;
+                color: white;
+                border: none;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: background-color 0.3s ease ;
+            }
+            button:hover{
+                background-color: #0056b3;
+            }
+
+            .section{
+                margin-top: 25px;
+            }
+
+            .card{
+                background: #f9f9f9;
+                padding: 15px;
+                border-radius: 8px;
+            }
+
+        </style>
+
+        <script>
+            function showLoading(){
+                document.getElementById("btn").innerText = "Processing...";
+            }
+        </script>
+
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>LeetCode Pattern Assistant</h1>
+            <form method="POST">
+                <textarea name="problem" rows="6">
+                    {{ request.form.get('problem','') }}
+                </textarea>
+
+                <select name="category">
+                    <option value="array" {% if request.form.get('category') == 'array' %}selected{% endif %}>Array</option>
+                    <option value="linked_list" {% if request.form.get('category') == 'linked_list' %}selected{% endif %}>Linked List</option>
+                    <option value="string" {% if request.form.get('category') == 'string' %}selected{% endif %}>String</option>
+                    <option value="tree" {% if request.form.get('category') == 'tree' %}selected{% endif %}>Tree</option>
+                </select>
+
+                <button id="btn" type="submit" onclick="showLoading()">Get Hints</button>
+            </form>
+
+            {% if keyword_results %}
+            <div class="section">
+                <h2>Keyword Suggestions</h2>
+                <div class="card">
+                    <ul>
+                        {% for item in keyword_results %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if category_data %}
+            <div class="section">
+                <h2>Approach</h2>
+                <div class="card">
+                    <ul>
+                        {% for item in category_data.approach %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Edge Cases</h2>
+                <div class="card">
+                    <ul>
+                        {% for item in category_data.edge_cases %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Complexity</h2>
+                <div class="card">
+                    <ul>
+                        {% for item in category_data.complexity %}
+                            <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </body>
+</html>
